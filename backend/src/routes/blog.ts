@@ -15,7 +15,6 @@ export const blogRouter = new Hono<{
 }>();
 
 
-
 blogRouter.use('/*', async (c, next) => {
   console.log(c.req)
   const jwt = c.req.header('authorization');
