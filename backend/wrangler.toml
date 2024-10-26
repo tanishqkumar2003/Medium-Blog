@@ -5,5 +5,5 @@ compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
 DATABASE_URL = "${DIRECT_URL}"
-JWT_SECRET = "myjwtsecret"
+JWT_SECRET = ""
 
