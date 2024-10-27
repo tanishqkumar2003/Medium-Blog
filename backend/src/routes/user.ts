@@ -32,25 +32,33 @@ userRouter.post("/signup", async (c) => {
     try {
         const user = await prisma.user.create({
             data: {
-                email: body.email,
+                username: body.username,
                 password: body.password
             }
-        })
-
+        });
+    
         const payload = {
-            id: user.id
-            // exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
-        }
-        const token = await sign(payload, c.env.JWT_SECRET)
-
+            id: user.id,
+        };
+        const token = await sign(payload, c.env.JWT_SECRET);
+    
         return c.json({
-            msg: "User succesfully created",
+            msg: "User successfully created",
             token
         });
-    } catch (e) {
+    } catch (e: any) {
+        if (e.code === 'P2002') {
+            c.status(409); // Conflict, unique constraint violation
+            return c.json({ error: "Email already exists" });
+        }
+        console.error("Error details:", e); // Log error for more info
         c.status(403);
-        return c.json({ error: "error while signing up" });
+        // c.json({e})
+        return c.json({ error: "error while signing",
+            e
+         });
     }
+    
 });
 
 
@@ -71,7 +79,7 @@ userRouter.post("/signin", async (c) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
-                email: body.email
+                username: body.username
             }
         })
 

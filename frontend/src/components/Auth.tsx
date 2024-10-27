@@ -1,14 +1,29 @@
-import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { signupInput } from "tanishqkumar-medium-common";
 import { LabelledInput } from "./LabelledInput";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
+    const navigate = useNavigate();
   const [postInput, setPostInput] = useState<signupInput>({
     name: "",
     username: "",
     password: "",
   });
+
+  async function sendRequest() {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInput)
+        console.log(response);
+        const jwt = response.data?.token;
+        localStorage.setItem('token', jwt);
+        navigate("/blog")
+    } catch (e) {
+        alert("Error while logging")
+    }
+  }
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800">
@@ -64,7 +79,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           }
         />
 
-        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 mt-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+        <button onClick={sendRequest} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 mt-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
           {type === "signup" ? "Signup" : "Signin"}
         </button>
       </div>
