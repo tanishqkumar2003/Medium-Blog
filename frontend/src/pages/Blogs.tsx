@@ -1,35 +1,21 @@
+import { Appbar } from "../components/Appbar";
 import { BlogCard } from "../components/BlogCard";
+import { useBlogHook } from "../hooks/useBlogHook";
 
 export const Blogs = () => {
-  return (
-    <div>
-      <BlogCard
-        authorName={"harkiart"}
-        title={"blog title"}
-        content={
-          "blog content Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur."
-        }
-        publishedDate={"28 Oct 2024"}
-        imageUrl=""
-      />
-      <BlogCard
-        authorName={"harkiart"}
-        title={"blog title"}
-        content={
-          "blog content Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur."
-        }
-        publishedDate={"28 Oct 2024"}
-        imageUrl=""
-      />
-      <BlogCard
-        authorName={"harkiart"}
-        title={"blog title"}
-        content={
-          "blog content ctetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nostrum esse asperiores perspiciatis ab molestiae blanditiis ad. Facere velit quam id esse debitis rerum, quasi ea reprehenderit fugit molestias! Tenetur."
-        }
-        publishedDate={"28 Oct 2024"}
-        imageUrl=""
-      />
+    const {blogs, loading} = useBlogHook();
+  return (<>
+    <Appbar />
+    <div className="px-7 mt-5">
+      {blogs.map(blog  => <BlogCard 
+            id={blog.id}
+            key={blog.id}
+            authorName={blog.author.name || "Anonymous"}
+            title={blog.title}
+            content={blog.content}
+            publishedDate={"28 Oct"}
+        />)}
     </div>
+    </>
   );
 };

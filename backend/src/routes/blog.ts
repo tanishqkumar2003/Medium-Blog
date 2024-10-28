@@ -25,7 +25,6 @@ blogRouter.use('/*', async (c, next) => {
       message: "Invalid Header"
     })
   }
-  console.log("kkuyhtgrfe")
 
   const token = jwt.split(' ')[1];
   if (!jwt) {
@@ -42,7 +41,6 @@ blogRouter.use('/*', async (c, next) => {
     //@ts-ignore
     c.set('userId', payload.id);
     c.json({
-      in: "middleware",
       id: payload.id
     })
     await next();
@@ -136,7 +134,19 @@ blogRouter.get('/bulk', async (c) => {
   }).$extends(withAccelerate());
 
   try {
-    const posts = await prisma.post.findMany({});
+    const posts = await prisma.post.findMany({
+      select: {
+        content:true,
+        title: true,
+        id:true,
+        
+        author:{
+          select:{
+            name:true
+          }
+        }
+      }
+    });
     return c.json(posts);
   } catch (error) {
     return c.json({
