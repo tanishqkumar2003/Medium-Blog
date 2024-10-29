@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../config";
+import axios from "axios";
 
-export interface Blog {
+interface Blog {
   title: string;
   content: string;
   id: number;
@@ -12,25 +12,28 @@ export interface Blog {
   };
 }
 
-export const useBlogHook = () => {
+export const useBlogId = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(true);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blog, setBlog] = useState<Blog>();
 
   useEffect(() => {
+    setLoading(true);
+    setBlog(undefined); // Clear previous blog data when id changes
     axios
-      .get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+      .get(`${BACKEND_URL}/api/v1/blog/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       })
       .then((response) => {
-        setBlogs(response.data);
+        setBlog(response.data);
         setLoading(false);
-      });
-  }, []);
+      })
+      .catch(() => setLoading(false)); // Handle errors
+  }, [id]);
 
   return {
-    blogs,
+    blog,
     loading,
   };
 };
