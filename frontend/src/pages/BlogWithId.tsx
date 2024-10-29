@@ -15,7 +15,7 @@ export const BlogWithId = ()=>{
     }
     return (
         <div>
-          {blog && <BlogView blog={blog} />} {/* Pass blog as a prop */}
+          {blog && <BlogView blog={blog} />}
         </div>
       );
     };

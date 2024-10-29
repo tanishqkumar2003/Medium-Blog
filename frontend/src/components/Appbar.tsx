@@ -15,16 +15,16 @@ export const Appbar = () => {
         {/* Right Side: Navigation Links and Profile */}
         <div className="flex items-center space-x-8">
           <nav className="flex space-x-6 font-medium">
-            <Link to="/blogs" className="hover:text-gray-200 transition">Home</Link>
+            <button className="hover:text-gray-200 transition"><Link to={"/blogs"}>Home</Link></button>
             <button className="hover:text-gray-200 transition">Explore</button>
             <button className="hover:text-gray-200 transition">My Blogs</button>
-            <button className="hover:text-gray-200 transition">Write</button>
+            <button className="hover:text-gray-200 transition"><Link to={"/create"}>Write</Link></button>
           </nav>
           <div className="flex items-center space-x-4">
             <button className="bg-white text-blue-600 px-4 py-1 rounded-full font-semibold hover:bg-gray-100 transition">
               Sign In
             </button>
-            <Aavtar name="abc" />
+            <Aavtar name={localStorage?.getItem('username') || "U"} />
           </div>
         </div>
       </div>

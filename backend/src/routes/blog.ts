@@ -5,6 +5,7 @@ import { verify } from 'hono/jwt'
 import { createBlogInput, updateBlogInput } from "tanishqkumar-medium-common";
 
 
+
 export const blogRouter = new Hono<{
   Bindings: {
     DATABASE_URL: string,
@@ -73,7 +74,8 @@ blogRouter.post("/create", async (c) => {
       data: {
         title: body.title,
         content: body.content,
-        authorId: userId
+        authorId: userId,
+        published: body.published
       }
     })
     return c.json({
@@ -91,15 +93,15 @@ blogRouter.post("/create", async (c) => {
 });
 
 
-blogRouter.put("/blog", async (c) => {
+blogRouter.put("/update", async (c) => {
   const body = await c.req.json();
-  const { success } = updateBlogInput.safeParse(body);
-  if (!success) {
-    c.status(411);
-    return c.json({
-      message: "Invalid Inputs"
-    })
-  }
+  // const { success } = updateBlogInput.safeParse(body);
+  // if (!success) {
+  //   c.status(411);
+  //   return c.json({
+  //     message: "Invalid Inputs"
+  //   })
+  // }
 
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -115,15 +117,17 @@ blogRouter.put("/blog", async (c) => {
       data: {
         title: body.title,
         content: body.content,
+        published: body.published
       }
     })
     return c.json({
-      message: "Blog Updated Successfully"
+      message: "Blog Updated Successfully",
+      blog
     })
   } catch (error) {
     c.status(403);
     return c.json({
-      message: "error creating post"
+      message: "error upadting post"
     })
   }
 });
@@ -136,10 +140,14 @@ blogRouter.get('/bulk', async (c) => {
 
   try {
     const posts = await prisma.post.findMany({
+      where: {
+        published: true
+      },
       select: {
         content: true,
         title: true,
         id: true,
+        published:true,
         createdAt: true,
         author: {
           select: {
@@ -166,12 +174,14 @@ blogRouter.get("/:id", async (c) => {
   try {
     const post = await prisma.post.findFirst({
       where: {
-        id
+        id,
+        published: true
       },
       select: {
         id: true,
         title: true,
         content: true,
+        published:true,
         author: {
           select: {
             name: true

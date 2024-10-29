@@ -18,6 +18,8 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInput)
         console.log(response);
         const jwt = response.data?.token;
+        const name = JSON.parse(response.config.data).username;
+        localStorage.setItem('username', name)
         localStorage.setItem('token', jwt);
         navigate("/blogs")
     } catch (e) {
