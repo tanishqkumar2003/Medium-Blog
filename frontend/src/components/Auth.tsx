@@ -19,8 +19,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         console.log(response);
         const jwt = response.data?.token;
         const name = JSON.parse(response.config.data).username;
+        const id = response.data.payload.id;
         localStorage.setItem('username', name)
         localStorage.setItem('token', jwt);
+        localStorage.setItem('id',id)
+        console.log(id);
+        
         navigate("/blogs")
     } catch (e) {
         alert("Error while logging")
