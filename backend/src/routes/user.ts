@@ -44,7 +44,8 @@ userRouter.post("/signup", async (c) => {
     
         return c.json({
             msg: "User successfully created",
-            token
+            token,
+            payload
         });
     } catch (e: any) {
         if (e.code === 'P2002') {
