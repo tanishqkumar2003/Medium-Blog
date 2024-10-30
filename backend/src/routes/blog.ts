@@ -198,5 +198,37 @@ blogRouter.get("/:id", async (c) => {
 });
 
 
-// Add Pagination for better UI
+blogRouter.post('/myblog', async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const userId = c.get('userId')
+
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        authorId: userId
+      },
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        published:true,
+        createdAt: true,
+        author: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
+    return c.json(posts);
+  } catch (error) {
+    return c.json({
+      message: "Error fetching the blog"
+    })
+  }
+})
+
 

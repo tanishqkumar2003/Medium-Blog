@@ -5,8 +5,8 @@ import { useBlogHook } from "../hooks/useBlogHook";
 export const Blogs = () => {
   const { blogs, loading } = useBlogHook();
 
-  function formatToIST(createdAt: string) {
-    const date = new Date(createdAt); // Convert to Date object
+   function formatToIST(createdAt: string) {
+    const date = new Date(createdAt);
     return date.toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
       day: "numeric",
