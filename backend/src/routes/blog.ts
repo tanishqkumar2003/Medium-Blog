@@ -232,3 +232,41 @@ blogRouter.post('/myblog', async (c) => {
 })
 
 
+blogRouter.get('/search/:param', async (c) => {
+  const param = c.req.param('param');
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  if (typeof param !== 'string') {
+    c.status(400)
+    return c.json({ message: 'Invalid query' });
+  }
+
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        OR: [     // OR is used to search in multiple feilds
+          {
+            title: {
+              contains: param,
+              mode: 'insensitive', // optional: case-insensitive search
+            },
+          },
+          {
+            content: {
+              contains: param,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      }
+    });
+    return c.json({
+      message: "search success",
+      posts
+    });
+  } catch (error) {
+    console.error('Error searching posts:', error);
+  }
+})
