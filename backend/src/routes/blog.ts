@@ -232,8 +232,8 @@ blogRouter.post('/myblog', async (c) => {
 })
 
 
-blogRouter.get('/search/:param', async (c) => {
-  const param = c.req.param('param');
+blogRouter.get('/search/:param?', async (c) => {
+  const param = c.req.param('param') || 'a';
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -260,6 +260,17 @@ blogRouter.get('/search/:param', async (c) => {
             },
           },
         ],
+      },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        published:true,
+        author: {
+          select: {
+            name: true
+          }
+        }
       }
     });
     return c.json({

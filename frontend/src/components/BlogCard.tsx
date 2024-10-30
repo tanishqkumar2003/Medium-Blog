@@ -37,7 +37,7 @@ interface BlogCardProps {
         <div className="md:w-1/3 mb-4 md:mb-0">
           <img
             src={imageUrl}
-            alt="Blog content image"
+            alt="No Content Image Available"
             className="object-cover w-full h-full rounded-lg"
           />
         </div>
