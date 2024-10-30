@@ -1,9 +1,11 @@
 import { Appbar } from "../components/Appbar";
 import { BlogCard } from "../components/BlogCard";
-import { useBlogHook } from "../hooks/useBlogHook";
+import { SearchBlog } from "../components/SearchBlog";
+import { useSearchBlog } from "../hooks/useSearchBlog";
 
-export const Blogs = () => {
-  const { blogs, loading } = useBlogHook();
+
+export const Explore = () => {
+  const { searchBlogs, loading } = useSearchBlog()
 
    function formatToIST(createdAt: string) {
     const date = new Date(createdAt);
@@ -26,8 +28,9 @@ export const Blogs = () => {
   return (
     <>
       <Appbar />
+      <SearchBlog/>
       <div className="px-7 mt-5">
-        {blogs.map((blog) => (
+        {searchBlogs.map((blog) => (
           <BlogCard
             id={blog.id}
             key={blog.id}

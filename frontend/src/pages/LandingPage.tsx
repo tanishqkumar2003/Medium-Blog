@@ -1,10 +1,8 @@
-import { Appbar } from "../components/Appbar";
 import { Link } from "react-router-dom";
 
 export const LandingPage = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Appbar />
 
       {/* Hero Section */}
       <section className="flex flex-col items-center text-center py-16 bg-gradient-to-b from-blue-600 to-blue-400 text-white">
@@ -90,6 +88,7 @@ export const LandingPage = () => {
             <Link to="/terms" className="hover:text-white">
               Contact Us
             </Link>
+
           </div>
         </div>
       </footer>
