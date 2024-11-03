@@ -75,12 +75,14 @@ blogRouter.post("/create", async (c) => {
         title: body.title,
         content: body.content,
         authorId: userId,
-        published: body.published
+        published: body.published,
+        author: body.name
       }
     })
     return c.json({
       message: "Blog created Successfully",
-      id: post.id
+      id: post.id,
+      name:  post.authorId
     })
   } catch (error) {
     c.status(403);

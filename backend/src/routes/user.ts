@@ -33,7 +33,8 @@ userRouter.post("/signup", async (c) => {
         const user = await prisma.user.create({
             data: {
                 username: body.username,
-                password: body.password
+                password: body.password,
+                name: body.name
             }
         });
     
@@ -45,7 +46,8 @@ userRouter.post("/signup", async (c) => {
         return c.json({
             msg: "User successfully created",
             token,
-            payload
+            payload,
+            user
         });
     } catch (e: any) {
         if (e.code === 'P2002') {
@@ -90,7 +92,7 @@ userRouter.post("/signin", async (c) => {
                 message: "User not found"
             })
         }
-
+        
         const payload = {
             id: user.id
             // exp: Math.floor(Date.now() / 1000) + 60 * 5, // Token expires in 5 minutes
@@ -100,7 +102,8 @@ userRouter.post("/signin", async (c) => {
         return c.json({
             msg: "User logged in successfully",
             token,
-            payload
+            payload,
+            user
         });
     } catch (e) {
         c.status(403);

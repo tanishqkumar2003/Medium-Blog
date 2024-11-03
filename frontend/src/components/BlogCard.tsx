@@ -31,7 +31,7 @@ interface BlogCardProps {
           <div className="font-bold text-lg text-gray-800 mb-2">{title}</div>
           <div className="text-gray-700 mb-4">{content.slice(0, 200) + "..."}</div>
           <div className="text-gray-500 text-sm mb-4">{`${Math.ceil(
-            content.length / 100
+            content.length / 1000
           )} minutes read`}</div>
         </div>
         <div className="md:w-1/3 mb-4 md:mb-0">

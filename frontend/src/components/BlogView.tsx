@@ -8,20 +8,7 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
       <div className="max-w-3xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-2xl transition-transform hover:-translate-y-1 hover:shadow-lg duration-300">
         <div className="flex justify-between items-center mb-6 border-b pb-4 border-gray-200">
           <h1 className="text-4xl font-bold text-gray-800">{blog.title}</h1>
-          <div className="text-right">
-            <p className="text-lg text-gray-800 font-semibold">
-              {blog.author.name || "Anonymous"}
-            </p>
-            <p className="text-xs text-gray-500">
-              {new Date(blog.createdAt).toLocaleString("en-IN", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-              })}
-            </p>
-          </div>
+          {/* <div className="text-right"></div> */}
         </div>
 
         <div className="text-gray-700 text-lg leading-relaxed mb-8">
@@ -36,7 +23,9 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
               </span>
             </div>
             <div className="ml-4">
-              <p className="text-gray-800 font-semibold">{blog.author.name || "Anonymous"}</p>
+              <p className="text-gray-800 font-semibold">
+                {blog.author.name || "Anonymous"}
+              </p>
               <p className="text-sm text-gray-500">Author</p>
             </div>
           </div>

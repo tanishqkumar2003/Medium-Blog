@@ -26,6 +26,8 @@ export const useBlogHook = () => {
       .then((response) => {
         setBlogs(response.data);
         setLoading(false);
+        console.log(response.data);
+        
       });
   }, []);
 
