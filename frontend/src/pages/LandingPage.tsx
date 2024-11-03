@@ -85,7 +85,7 @@ export const LandingPage = () => {
             <Link to="/about" className="hover:text-white">
               About
             </Link>
-            <Link to="/terms" className="hover:text-white">
+            <Link to="/contact" className="hover:text-white">
               Contact Us
             </Link>
 

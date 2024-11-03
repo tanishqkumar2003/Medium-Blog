@@ -8,6 +8,8 @@ import { CreateBlog } from './pages/CreateBlog.tsx'
 import { MyBlog } from './components/MyBlog.tsx'
 import { MyBlogWithId } from './pages/MyBlogsWithId.tsx'
 import { Explore } from './pages/Explore.tsx'
+import { AboutUs } from './pages/AboutUs.tsx'
+import { ContactUs } from './pages/ContactUs.tsx'
 
 function App() {
 
@@ -16,6 +18,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/create" element={<CreateBlog />} />
