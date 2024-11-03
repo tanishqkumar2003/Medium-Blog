@@ -1,4 +1,3 @@
-import { Appbar } from "../components/Appbar";
 import { NoUserAppbar } from "../components/NoUserAppbar";
 
 export const AboutUs = () => {
