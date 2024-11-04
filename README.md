@@ -2,8 +2,6 @@
 
 This project is a clone of Medium, a platform for publishing articles and engaging with readers. It leverages modern technologies such as React for the frontend, Cloudflare Workers for the backend, and various other tools and libraries to create a seamless user experience.
 
-## You can check out the website [here](https://thoughtsphere-6b5e7.web.app)
-
 ## Technologies Used
 
 -   **Frontend**: React.js
