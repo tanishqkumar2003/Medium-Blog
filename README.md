@@ -33,6 +33,7 @@ The backend, powered by Cloudflare Workers, ensures low latency and high perform
 
 PostgreSQL serves as the database management system, providing reliability and scalability. Prisma is used as the ORM tool for seamless database interaction and efficient connection pooling.
 
+
 ## Getting Started
 
 To get started with this project, follow these steps:
