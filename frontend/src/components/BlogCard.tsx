@@ -15,8 +15,7 @@ export const BlogCard = ({
   authorName,
   title,
   content,
-  publishedDate,
-  imageUrl,
+  publishedDate
 }: BlogCardProps) => {
   return (
     <Link to={`/blog/${id}`}>
