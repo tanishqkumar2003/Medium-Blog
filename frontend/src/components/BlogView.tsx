@@ -7,13 +7,18 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
       <Appbar />
       <div className="max-w-3xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-2xl transition-transform hover:-translate-y-1 hover:shadow-lg duration-300">
         <div className="flex justify-between items-center mb-6 border-b pb-4 border-gray-200">
-          <h1 className="text-4xl font-bold text-gray-800">{blog.title}</h1>
+          <div className="font-bold text-3xl text-gray-800 mb-2">{blog.title}</div>
           {/* <div className="text-right"></div> */}
         </div>
 
-        <div className="text-gray-700 text-lg leading-relaxed mb-8">
+        {/* <div className="text-gray-700 text-lg leading-relaxed mb-8">
           {blog.content}
-        </div>
+        </div> */}
+
+        <div
+          className="prose"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        ></div>
 
         <div className="border-t border-gray-200 pt-6">
           <div className="flex items-center justify-end">
