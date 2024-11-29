@@ -82,7 +82,7 @@ blogRouter.post("/create", async (c) => {
     return c.json({
       message: "Blog created Successfully",
       id: post.id,
-      name:  post.authorId
+      name: post.authorId
     })
   } catch (error) {
     c.status(403);
@@ -104,7 +104,6 @@ blogRouter.put("/update", async (c) => {
   //     message: "Invalid Inputs"
   //   })
   // }
-
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -149,7 +148,7 @@ blogRouter.get('/bulk', async (c) => {
         content: true,
         title: true,
         id: true,
-        published:true,
+        published: true,
         createdAt: true,
         author: {
           select: {
@@ -183,7 +182,7 @@ blogRouter.get("/:id", async (c) => {
         id: true,
         title: true,
         content: true,
-        published:true,
+        published: true,
         author: {
           select: {
             name: true
@@ -216,7 +215,7 @@ blogRouter.post('/myblog', async (c) => {
         content: true,
         title: true,
         id: true,
-        published:true,
+        published: true,
         createdAt: true,
         author: {
           select: {
@@ -267,7 +266,7 @@ blogRouter.get('/search/:param?', async (c) => {
         id: true,
         title: true,
         content: true,
-        published:true,
+        published: true,
         author: {
           select: {
             name: true
@@ -283,3 +282,23 @@ blogRouter.get('/search/:param?', async (c) => {
     console.error('Error searching posts:', error);
   }
 })
+
+blogRouter.delete("/:id", async (c) => {
+  const id = c.req.param('id');
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const post = await prisma.post.delete({
+      where: {
+        id
+      },
+    });
+    return c.json(post);
+  } catch (error) {
+    return c.json({
+      message: "Error fetching the blog"
+    })
+  }
+});
