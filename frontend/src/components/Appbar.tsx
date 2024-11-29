@@ -33,6 +33,9 @@ export const Appbar = () => {
             <button className="hover:text-gray-200 transition">
               <Link to={"/create"}>Write</Link>
             </button>
+            <button className="hover:text-gray-200 transition">
+              <Link to={"/edit"}>Edit</Link>
+            </button>
           </nav>
           <div className="flex items-center space-x-4">
             <Aavtar name={localStorage?.getItem("username") || ""} />

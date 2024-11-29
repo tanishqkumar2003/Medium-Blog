@@ -4,6 +4,7 @@ import { signupInput } from "tanishqkumar-medium-common";
 import { LabelledInput } from "./LabelledInput";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import { log } from "console";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
@@ -20,9 +21,13 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         const jwt = response.data.token;
         const username = JSON.parse(response.config.data).username;
         const id = response.data.payload.id;
+        const name = response.data.user.name;
+        console.log(response.data.user.name);
+        
         localStorage.setItem('username', username)
         localStorage.setItem('token', jwt);
         localStorage.setItem('id',id)
+        localStorage.setItem("name", name);
         
         navigate("/blogs")
     } catch (e) {
