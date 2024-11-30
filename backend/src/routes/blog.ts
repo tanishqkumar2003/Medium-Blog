@@ -3,8 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from 'hono/jwt'
 import { createBlogInput, updateBlogInput } from "tanishqkumar-medium-common";
-
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const blogRouter = new Hono<{
   Bindings: {
@@ -17,40 +16,39 @@ export const blogRouter = new Hono<{
 }>();
 
 
-blogRouter.use('/*', async (c, next) => {
-  console.log(c.req)
-  const jwt = c.req.header('authorization');
-  if (!jwt || !jwt.startsWith('Bearer ')) {
-    c.status(403);
-    return c.json({
-      message: "Invalid Header"
-    })
-  }
+// blogRouter.use('/*', async (c, next) => {
+//   const jwt = c.req.header('authorization');
+//   if (!jwt || !jwt.startsWith('Bearer ')) {
+//     c.status(403);
+//     return c.json({
+//       message: "Invalid Header"
+//     })
+//   }
 
-  const token = jwt.split(' ')[1];
-  if (!jwt) {
-    c.status(401);
-    return c.json({ error: "unauthorized" });
-  }
-  try {
-    const payload = await verify(token, c.env.JWT_SECRET);
+//   const token = jwt.split(' ')[1];
+//   if (!jwt) {
+//     c.status(401);
+//     return c.json({ error: "unauthorized" });
+//   }
+//   try {
+//     const payload = await verify(token, c.env.JWT_SECRET);
 
-    if (!payload) {
-      c.status(401);
-      return c.json({ error: "unauthorized" });
-    }
-    //@ts-ignore
-    c.set('userId', payload.id);
-    c.json({
-      id: payload.id
-    })
-    await next();
-  } catch (error) {
-    return c.json({
-      message: "error in jwt verification"
-    })
-  }
-})
+//     if (!payload) {
+//       c.status(401);
+//       return c.json({ error: "unauthorized" });
+//     }
+//     //@ts-ignore
+//     c.set('userId', payload.id);
+//     c.json({
+//       id: payload.id
+//     })
+//     await next();
+//   } catch (error) {
+//     return c.json({
+//       message: "error in jwt verification"
+//     })
+//   }
+// })
 
 
 blogRouter.post("/create", async (c) => {
@@ -283,6 +281,7 @@ blogRouter.get('/search/:param?', async (c) => {
   }
 })
 
+
 blogRouter.delete("/:id", async (c) => {
   const id = c.req.param('id');
   const prisma = new PrismaClient({
@@ -300,5 +299,51 @@ blogRouter.delete("/:id", async (c) => {
     return c.json({
       message: "Error fetching the blog"
     })
+  }
+});
+
+
+blogRouter.post("/ai", async (c) => {
+  try {
+    // Check if Content-Type is application/json
+    const contentType = c.req.header("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return c.json({ error: "Content-Type must be application/json" }, 400);
+    }
+
+    // Try to parse the body as JSON
+    let body;
+    try {
+      body = await c.req.json();
+    } catch (error) {
+      return c.json({ error: "Invalid JSON format" }, 400);
+    }
+
+    const { prompt } = body;
+
+    if (!prompt) {
+      return c.json({ error: "Prompt is required" }, 400);
+    }
+
+    const genAI = new GoogleGenerativeAI("AIzaSyAH8VAK17gFZfDrQM97D8GDqNz2fEPspSw");
+
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const generateContent = async (prompt: string) => {
+      try {
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (error) {
+        console.error("Error generating content:", error);
+        throw error; // Re-throw the error for handling in other files
+      }
+    };
+    const generatedContent = await generateContent(prompt);
+
+    return c.json({ content: generatedContent });
+  } catch (error) {
+    console.error("Error in /ai route:", error);
+    return c.json({ error: "Failed to generate content" }, 500);
   }
 });
