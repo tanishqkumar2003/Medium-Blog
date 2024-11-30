@@ -59,7 +59,7 @@ export const ContactUs: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    // console.log('Form submitted:', formData);
     setFormData({
       name: '',
       email: '',

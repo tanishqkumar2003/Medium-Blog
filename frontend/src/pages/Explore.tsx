@@ -6,7 +6,7 @@ import { useSearchBlog } from "../hooks/useSearchBlog";
 
 export const Explore = () => {
   const { searchBlogs, loading } = useSearchBlog()
-  console.log(searchBlogs);
+  // console.log(searchBlogs);
   
 
    function formatToIST(createdAt: string) {

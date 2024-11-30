@@ -32,8 +32,7 @@ const CreateBlogContent = () => {
       // const x = await response.data.content;
       if (response?.data) {
         setData(response.data.content);
-        console.log("AI Response:", data);
-        // console.log("AI Response:", x);
+        // console.log("AI Response:", data);
       } else {
         console.warn("No data received from AI.");
       }
@@ -59,9 +58,9 @@ const CreateBlogContent = () => {
           },
         }
       );
-      console.log(response);
-      console.log("Title:", title);
-      console.log("Content:", content);
+      // console.log(response);
+      // console.log("Title:", title);
+      // console.log("Content:", content);
       navigate("/blogs");
     } catch (e) {
       alert("Error while creating the blog post");
