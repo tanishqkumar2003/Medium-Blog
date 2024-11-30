@@ -24,7 +24,7 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
       });
       alert("Blog post deleted successfully.");
 
-      navigate("/blogs");
+      navigate("/edit");
     } catch (error: any) {
       console.error("Error deleting blog:", error);
       alert(

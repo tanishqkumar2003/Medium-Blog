@@ -58,7 +58,7 @@ const CreateBlogContent = () => {
           },
         }
       );
-      // console.log(response);
+      console.log(response);
       // console.log("Title:", title);
       // console.log("Content:", content);
       navigate("/blogs");
