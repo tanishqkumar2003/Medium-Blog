@@ -3,16 +3,15 @@ import { Link } from "react-router-dom";
 export const LandingPage = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
-
       {/* Hero Section */}
       <section className="flex flex-col items-center text-center py-16 bg-gradient-to-b from-blue-600 to-blue-400 text-white">
         <h1 className="text-5xl font-extrabold mb-4">
           Welcome to ThoughtSphere
         </h1>
         <p className="text-lg max-w-xl mb-8">
-          Captures the essence of a shared space for diverse ideas and
-          perspectives, timeless and symbolic—ideal for a platform centered on
-          writing and creativity
+          A shared space for diverse ideas and perspectives, where AI fuels
+          creativity—timeless, symbolic, and ideal for a platform focused on
+          writing and innovation.
         </p>
         <Link
           to="/signup"
@@ -51,11 +50,11 @@ export const LandingPage = () => {
           {/* Feature 3 */}
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <h3 className="text-xl font-semibold text-blue-600 mb-2">
-              Engage and Connect
+              AI-Powered Creation
             </h3>
             <p className="text-gray-600">
-              Comment, like, and share your thoughts on blogs. Connect with
-              authors and fellow readers to build your network.
+              Generate ideas, refine writing, and craft stunning blogs
+              effortlessly with AI.
             </p>
           </div>
         </div>
@@ -78,9 +77,7 @@ export const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-gray-800 text-gray-300 py-6">
         <div className="max-w-6xl mx-auto text-center">
-          <p>
-            &copy; 2024 ThoughtSphere. All rights reserved.
-          </p>
+          <p>&copy; 2024 ThoughtSphere. All rights reserved.</p>
           <div className="flex justify-center space-x-4 mt-4">
             <Link to="/about" className="hover:text-white">
               About
@@ -88,7 +85,6 @@ export const LandingPage = () => {
             <Link to="/contact" className="hover:text-white">
               Contact Us
             </Link>
-
           </div>
         </div>
       </footer>

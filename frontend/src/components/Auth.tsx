@@ -16,12 +16,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   async function sendRequest() {
     try {
         const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInput)
-        console.log(response);
+        // console.log(response);
         const jwt = response.data.token;
         const username = JSON.parse(response.config.data).username;
         const id = response.data.payload.id;
         const name = response.data.user.name;
-        console.log(response.data.user.name);
+        // console.log(response.data.user.name);
         
         localStorage.setItem('username', username)
         localStorage.setItem('token', jwt);
