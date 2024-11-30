@@ -4,7 +4,6 @@ import { signupInput } from "tanishqkumar-medium-common";
 import { LabelledInput } from "./LabelledInput";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { log } from "console";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
