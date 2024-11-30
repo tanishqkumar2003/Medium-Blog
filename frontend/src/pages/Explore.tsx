@@ -6,18 +6,20 @@ import { useSearchBlog } from "../hooks/useSearchBlog";
 
 export const Explore = () => {
   const { searchBlogs, loading } = useSearchBlog()
+  console.log(searchBlogs);
+  
 
    function formatToIST(createdAt: string) {
-    const date = new Date(createdAt);
-    return date.toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
+     const date = new Date(createdAt);
+     return date.toLocaleString("en-IN", {
+       timeZone: "Asia/Kolkata",
+       day: "numeric",
+       month: "long",
+       year: "numeric",
+       hour: "2-digit",
+       minute: "2-digit",
+     });
+   }
 
   if(loading){
     return <div>

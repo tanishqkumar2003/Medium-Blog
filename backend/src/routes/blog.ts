@@ -16,39 +16,39 @@ export const blogRouter = new Hono<{
 }>();
 
 
-// blogRouter.use('/*', async (c, next) => {
-//   const jwt = c.req.header('authorization');
-//   if (!jwt || !jwt.startsWith('Bearer ')) {
-//     c.status(403);
-//     return c.json({
-//       message: "Invalid Header"
-//     })
-//   }
+blogRouter.use('/*', async (c, next) => {
+  const jwt = c.req.header('authorization');
+  if (!jwt || !jwt.startsWith('Bearer ')) {
+    c.status(403);
+    return c.json({
+      message: "Invalid Header"
+    })
+  }
 
-//   const token = jwt.split(' ')[1];
-//   if (!jwt) {
-//     c.status(401);
-//     return c.json({ error: "unauthorized" });
-//   }
-//   try {
-//     const payload = await verify(token, c.env.JWT_SECRET);
+  const token = jwt.split(' ')[1];
+  if (!jwt) {
+    c.status(401);
+    return c.json({ error: "unauthorized" });
+  }
+  try {
+    const payload = await verify(token, c.env.JWT_SECRET);
 
-//     if (!payload) {
-//       c.status(401);
-//       return c.json({ error: "unauthorized" });
-//     }
-//     //@ts-ignore
-//     c.set('userId', payload.id);
-//     c.json({
-//       id: payload.id
-//     })
-//     await next();
-//   } catch (error) {
-//     return c.json({
-//       message: "error in jwt verification"
-//     })
-//   }
-// })
+    if (!payload) {
+      c.status(401);
+      return c.json({ error: "unauthorized" });
+    }
+    //@ts-ignore
+    c.set('userId', payload.id);
+    c.json({
+      id: payload.id
+    })
+    await next();
+  } catch (error) {
+    return c.json({
+      message: "error in jwt verification"
+    })
+  }
+})
 
 
 blogRouter.post("/create", async (c) => {
@@ -265,6 +265,7 @@ blogRouter.get('/search/:param?', async (c) => {
         title: true,
         content: true,
         published: true,
+        createdAt:true,
         author: {
           select: {
             name: true
@@ -325,7 +326,7 @@ blogRouter.post("/ai", async (c) => {
       return c.json({ error: "Prompt is required" }, 400);
     }
 
-    const genAI = new GoogleGenerativeAI("AIzaSyAH8VAK17gFZfDrQM97D8GDqNz2fEPspSw");
+    const genAI = new GoogleGenerativeAI(your api key);
 
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
