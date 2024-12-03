@@ -4,6 +4,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from 'hono/jwt'
 import { createBlogInput, updateBlogInput } from "tanishqkumar-medium-common";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Resend } from "resend";
 
 export const blogRouter = new Hono<{
   Bindings: {
@@ -58,14 +59,14 @@ blogRouter.post("/create", async (c) => {
     c.status(411);
     return c.json({
       message: "Invalid Inputs"
-    })
+    });
   }
 
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const userId = c.get('userId')
+  const userId = c.get('userId');
 
   try {
     const post = await prisma.post.create({
@@ -76,19 +77,36 @@ blogRouter.post("/create", async (c) => {
         published: body.published,
         author: body.name
       }
-    })
+    });
+
+    // Email function
+    const resend = new Resend('your api');
+    const receiver = body.email;
+
+    try {
+      const data = await resend.emails.send({
+        from: 'ThoughtSphere@webmaven.tech',
+        to: receiver,
+        subject: 'Blog Created',
+        html: `<strong>Blog Created Successfully</strong><br/><p>Title :: ${body.title}</p><br/><p>Status: ${body.published ? "Published" : "Draft"}</p>`
+      });
+      console.log(data);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+    }
+
     return c.json({
       message: "Blog created Successfully",
       id: post.id,
       name: post.authorId
-    })
-  } catch (error) {
+    });
+  } catch (error: any) {
     c.status(403);
     return c.json({
-      message: "error creating post",
-      error: error,
+      message: "Error creating post",
+      error: error.message,
       user: userId
-    })
+    });
   }
 });
 
@@ -265,7 +283,7 @@ blogRouter.get('/search/:param?', async (c) => {
         title: true,
         content: true,
         published: true,
-        createdAt:true,
+        createdAt: true,
         author: {
           select: {
             name: true
@@ -285,6 +303,7 @@ blogRouter.get('/search/:param?', async (c) => {
 
 blogRouter.delete("/:id", async (c) => {
   const id = c.req.param('id');
+  const body = await c.req.json();
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -295,6 +314,21 @@ blogRouter.delete("/:id", async (c) => {
         id
       },
     });
+    // Email function
+    const resend = new Resend('your api');
+    const receiver = body.email;
+
+    try {
+      const data = await resend.emails.send({
+        from: 'ThoughtSphere@webmaven.tech',
+        to: receiver,
+        subject: 'Blog Deleted',
+        html: `<strong>Blog Deleted Successfully</strong>`
+      });
+      console.log(data);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+    }
     return c.json(post);
   } catch (error) {
     return c.json({
@@ -311,6 +345,7 @@ blogRouter.post("/ai", async (c) => {
     if (!contentType || !contentType.includes("application/json")) {
       return c.json({ error: "Content-Type must be application/json" }, 400);
     }
+    console.log(c.req.header);  // Log the headers to inspect
 
     // Try to parse the body as JSON
     let body;
@@ -326,7 +361,7 @@ blogRouter.post("/ai", async (c) => {
       return c.json({ error: "Prompt is required" }, 400);
     }
 
-    const genAI = new GoogleGenerativeAI(your api key);
+    const genAI = new GoogleGenerativeAI("AIzaSyAH8VAK17gFZfDrQM97D8GDqNz2fEPspSw");
 
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

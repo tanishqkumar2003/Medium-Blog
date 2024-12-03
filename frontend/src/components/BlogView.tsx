@@ -8,7 +8,9 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    alert("Edit section is under development and will be available soon")
+  };
 
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
@@ -20,6 +22,9 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
       await axios.delete(`${BACKEND_URL}/api/v1/blog/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        data: {
+          email: localStorage.getItem("username"),
         },
       });
       alert("Blog post deleted successfully.");

@@ -26,9 +26,17 @@ const CreateBlogContent = () => {
     }
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/v1/blog/ai`, {
-        prompt: search,
-      });
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/blog/ai`,
+        {
+          prompt: search,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
       // const x = await response.data.content;
       if (response?.data) {
         setData(response.data.content);
@@ -51,6 +59,7 @@ const CreateBlogContent = () => {
           content: content, // Use the global content here
           authorId: localStorage.getItem("id"),
           published: checked,
+          email: localStorage.getItem("username"),
         },
         {
           headers: {
