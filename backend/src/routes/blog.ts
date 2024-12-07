@@ -383,3 +383,51 @@ blogRouter.post("/ai", async (c) => {
     return c.json({ error: "Failed to generate content" }, 500);
   }
 });
+
+
+blogRouter.post("/summarize", async (c) => {
+  try {
+    // Check if Content-Type is application/json
+    const contentType = c.req.header("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return c.json({ error: "Content-Type must be application/json" }, 400);
+    }
+    console.log(c.req.header);  // Log the headers to inspect
+
+    // Try to parse the body as JSON
+    let body;
+    try {
+      body = await c.req.json();
+    } catch (error) {
+      return c.json({ error: "Invalid JSON format" }, 400);
+    }
+
+    let { prompt } = body;
+    prompt = prompt + " summarize using bulletpoints in 150 words use html tags"
+
+    if (!prompt) {
+      return c.json({ error: "Prompt is required" }, 400);
+    }
+
+    const genAI = new GoogleGenerativeAI("your api");
+
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const generateContent = async (prompt: string) => {
+      try {
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (error) {
+        console.error("Error generating content:", error);
+        throw error; // Re-throw the error for handling in other files
+      }
+    };
+    const generatedContent = await generateContent(prompt);
+
+    return c.json({ content: generatedContent });
+  } catch (error) {
+    console.error("Error in /ai route:", error);
+    return c.json({ error: "Failed to generate content" }, 500);
+  }
+});
