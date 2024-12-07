@@ -15,6 +15,7 @@ This project is a clone of Medium, a platform for publishing articles and engagi
 ## Features
 
 -   **User Authentication**: Secure user authentication using JWT tokens.
+-   **AI Assistance**: Effortlessly generate ideas, refine your writing.
 -   **Article Management**: Publishing and editing articles with Markdown support.
 -   **User Profiles**: View and manage user profiles, including authored articles.
 -   **Blogging Experience**: Write and publish blogs in Markdown format.
