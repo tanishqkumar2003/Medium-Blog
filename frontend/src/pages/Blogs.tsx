@@ -16,6 +16,7 @@ export const Blogs = () => {
       minute: "2-digit",
     });
   }
+  // console.log(blogs); 
 
   if (loading) {
     return <div>loading...</div>;

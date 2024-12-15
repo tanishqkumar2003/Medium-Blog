@@ -14,6 +14,9 @@ export const AboutUs = () => {
             sharing and discovering ideas, stories, and knowledge! Whether
             you're here to write, read, or explore, we aim to provide a seamless
             and enjoyable experience for all.
+            <br />
+            Developed by: <h1 className="font-bold">Tanishq Kumar</h1>
+            tanishqkumar1003@gmail.com
           </p>
 
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
@@ -31,6 +34,7 @@ export const AboutUs = () => {
           <ul className="list-disc list-inside text-gray-700 text-lg leading-relaxed mb-6">
             <li> A user-friendly interface for readers and writers alike.</li>
             <li> AI-Powered Creations.</li>
+            <li> Stay updated through email notifications.</li>
             <li> Quick and efficient blog search to discover new content.</li>
             <li> Simple tools for blog creation and content sharing.</li>
             <li> Personalized author profiles to showcase your work.</li>

@@ -34,7 +34,7 @@ export const Appbar = () => {
               <Link to={"/create"}>Write</Link>
             </button>
             <button className="hover:text-gray-200 transition">
-              <Link to={"/edit"}>Edit</Link>
+              <Link to={"/community"}>Community</Link>
             </button>
           </nav>
           <div className="flex items-center space-x-4">

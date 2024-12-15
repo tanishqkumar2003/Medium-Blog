@@ -10,7 +10,7 @@ import { MyBlogWithId } from './pages/MyBlogsWithId.tsx'
 import { Explore } from './pages/Explore.tsx'
 import { AboutUs } from './pages/AboutUs.tsx'
 import { ContactUs } from './pages/ContactUs.tsx'
-import Edit from './pages/Edit.tsx'
+import Community from './pages/Community.tsx'
 
 function App() {
 
@@ -29,7 +29,7 @@ function App() {
           <Route path="/blog/:id" element={<BlogWithId />} />
           <Route path="/blog/:id" element={<MyBlogWithId />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/edit" element={<Edit />} />
+          <Route path="/community" element={<Community />} />
         </Routes>
       </BrowserRouter>
     </>

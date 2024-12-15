@@ -111,8 +111,9 @@ blogRouter.post("/create", async (c) => {
 });
 
 
-blogRouter.put("/update", async (c) => {
+blogRouter.put("/update/:id", async (c) => {
   const body = await c.req.json();
+  const id = c.req.param('id');
   // const { success } = updateBlogInput.safeParse(body);
   // if (!success) {
   //   c.status(411);
@@ -123,20 +124,39 @@ blogRouter.put("/update", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
+  console.log(body.published);
 
   const userId = c.get("userId")
   try {
     const blog = await prisma.post.update({
       where: {
-        id: body.id,
+        id: id,
         authorId: userId
       },
       data: {
         title: body.title,
-        content: body.content,
+        // content: body.content,
         published: body.published
       }
     })
+
+    // Email function
+    const resend = new Resend('your api');
+    const receiver = "r1977sdausa@gmail.com" //body.email;
+
+    try {
+      const data = await resend.emails.send({
+        from: 'ThoughtSphere@webmaven.tech',
+        to: receiver,
+        subject: 'Blog Edited',
+        html: `<strong>Blog Edited Successfully</strong><br/><p>Title :: ${body.title}</p>`
+        // html: "Edit success"
+      });
+      console.log(data);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+    }
+
     return c.json({
       message: "Blog Updated Successfully",
       blog
@@ -409,7 +429,7 @@ blogRouter.post("/summarize", async (c) => {
       return c.json({ error: "Prompt is required" }, 400);
     }
 
-    const genAI = new GoogleGenerativeAI("your api");
+    const genAI = new GoogleGenerativeAI("AIzaSyAH8VAK17gFZfDrQM97D8GDqNz2fEPspSw");
 
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

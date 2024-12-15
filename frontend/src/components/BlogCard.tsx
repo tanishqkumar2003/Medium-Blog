@@ -7,7 +7,7 @@ interface BlogCardProps {
   title: string;
   content: string;
   publishedDate: string;
-  imageUrl?: string; 
+  imageUrl?: string;
 }
 
 export const BlogCard = ({
@@ -15,7 +15,7 @@ export const BlogCard = ({
   authorName,
   title,
   content,
-  publishedDate
+  publishedDate,
 }: BlogCardProps) => {
   return (
     <Link to={`/blog/${id}`}>
@@ -40,6 +40,9 @@ export const BlogCard = ({
           )} minutes read`}</div>
         </div>
 
+        {/* <div className="text-gray-500 text-sm mb-4">
+          {published ? "Published" : "Draft"}{" "}
+        </div> */}
       </div>
     </Link>
   );
