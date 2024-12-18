@@ -215,7 +215,7 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
 
               <div className="flex justify-between items-center mb-4">
                 <button
-                  onClick={() => setIsDraft((prev) => !prev)} // This will toggle the value correctly
+                  onClick={() => setIsDraft((prev) => !prev)} 
                   className={`${
                     isDraft ? "bg-yellow-500" : "bg-green-500"
                   } text-white px-4 py-2 rounded-lg hover:opacity-90 transition`}

@@ -381,7 +381,7 @@ blogRouter.post("/ai", async (c) => {
       return c.json({ error: "Prompt is required" }, 400);
     }
 
-    const genAI = new GoogleGenerativeAI("AIzaSyAH8VAK17gFZfDrQM97D8GDqNz2fEPspSw");
+    const genAI = new GoogleGenerativeAI("your api");
 
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -429,7 +429,7 @@ blogRouter.post("/summarize", async (c) => {
       return c.json({ error: "Prompt is required" }, 400);
     }
 
-    const genAI = new GoogleGenerativeAI("AIzaSyAH8VAK17gFZfDrQM97D8GDqNz2fEPspSw");
+    const genAI = new GoogleGenerativeAI("your api");
 
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
