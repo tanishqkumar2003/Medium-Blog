@@ -20,7 +20,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     let response ;
     try {
         response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInput)
-        console.log(response);
+        // console.log(response);
         const jwt = response.data.token;
         const username = JSON.parse(response.config.data).username;
         const id = response.data.payload.id;

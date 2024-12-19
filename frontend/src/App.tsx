@@ -27,7 +27,7 @@ function App() {
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/myblogs" element={<MyBlog />} />
           <Route path="/blog/:id" element={<BlogWithId />} />
-          <Route path="/blog/:id" element={<MyBlogWithId />} />
+          <Route path="/myblog/:id" element={<MyBlogWithId />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/community" element={<Community />} />
         </Routes>

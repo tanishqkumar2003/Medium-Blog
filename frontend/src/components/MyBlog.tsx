@@ -58,7 +58,7 @@ export const MyBlog = () => {
       <div className="px-7 mt-5 w-3/5 m-56">
         {myblog.length > 0 ? (
           myblog.map((blog) => (
-            <Link to={`/blog/${blog.id}`} key={blog.id}>
+            <Link to={`/myblog/${blog.id}`} key={blog.id}>
               <BlogCard
                 id={blog.id}
                 authorName={blog.author?.name || "Anonymous"}
