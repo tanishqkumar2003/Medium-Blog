@@ -9,7 +9,7 @@ import { BlogTitle } from "@/components/BlogTitle";
 
 const CreateBlogContent = () => {
   const [title, setTitle] = useState<string>("");
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
   const [search, setSearch] = useState<string>("");
   const [data, setData] = useState<string>("");
   const { content } = useEditor();
@@ -18,6 +18,8 @@ const CreateBlogContent = () => {
   const handleClick = () => {
     setChecked(!checked);
   };
+  console.log(checked);
+  
 
   const handleSearch = async () => {
     if (!search.trim()) {
@@ -26,9 +28,17 @@ const CreateBlogContent = () => {
     }
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/v1/blog/ai`, {
-        prompt: search,
-      });
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/blog/ai`,
+        {
+          prompt: search,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
       // const x = await response.data.content;
       if (response?.data) {
         setData(response.data.content);
@@ -51,6 +61,7 @@ const CreateBlogContent = () => {
           content: content, // Use the global content here
           authorId: localStorage.getItem("id"),
           published: checked,
+          email: localStorage.getItem("username"),
         },
         {
           headers: {
@@ -88,9 +99,9 @@ const CreateBlogContent = () => {
               onClick={handleClick}
               className="sr-only peer"
             />
-            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <div className="ml-3 relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-black">
-              {checked ? "Publish" : "Draft"}
+              Draft
             </span>
           </label>
         </div>
