@@ -7,6 +7,9 @@ import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
+    const [error, setError] = useState<boolean>(false);
+    const [emailExistError, setEmailExistError] = useState<boolean>(false);
+
   const [postInput, setPostInput] = useState<signupInput>({
     name: "",
     username: "",
@@ -14,19 +17,31 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   });
 
   async function sendRequest() {
+    let response ;
     try {
-        const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInput)
-        console.log(response);
+        response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInput)
+        // console.log(response);
         const jwt = response.data.token;
         const username = JSON.parse(response.config.data).username;
         const id = response.data.payload.id;
+        const name = response.data.user.name;
+        // console.log(response.data.user.name);
+        
         localStorage.setItem('username', username)
         localStorage.setItem('token', jwt);
         localStorage.setItem('id',id)
-        
+        localStorage.setItem("name", name);
+       
         navigate("/blogs")
+        
     } catch (e) {
-        alert("Error while logging")
+      if (response?.data.error) {
+         setEmailExistError(true);
+      } 
+      if(!response?.data){
+        setError(true);
+        // console.log(error);    
+      }
     }
   }
 
@@ -47,6 +62,58 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
             {type === "signin" ? "Signup" : "Signin"}
           </Link>
         </p>
+        {emailExistError && (
+          <div
+            className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <svg
+              className="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span className="sr-only">Danger</span>
+            <div>
+              <span className="font-medium">
+                An account is already registered with this email address
+              </span>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div
+            className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <svg
+              className="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span className="sr-only">Danger</span>
+            <div>
+              <span className="font-medium">
+                Unable to log in. Ensure that these requirements are met:
+              </span>
+              <ul className="mt-1.5 list-disc list-inside">
+                <li>At least 10 characters (and up to 100 characters)</li>
+                <li>At least one lowercase character</li>
+                <li>
+                  Inclusion of at least one special character, e.g., ! @ # ?
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
 
         {type === "signup" ? (
           <LabelledInput
@@ -84,7 +151,10 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           }
         />
 
-        <button onClick={sendRequest} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 mt-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+        <button
+          onClick={sendRequest}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 mt-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+        >
           {type === "signup" ? "Signup" : "Signin"}
         </button>
       </div>

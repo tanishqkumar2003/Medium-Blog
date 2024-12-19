@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from 'hono/jwt'
 import { createBlogInput, updateBlogInput } from "tanishqkumar-medium-common";
-
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Resend } from "resend";
 
 export const blogRouter = new Hono<{
   Bindings: {
@@ -18,7 +18,6 @@ export const blogRouter = new Hono<{
 
 
 blogRouter.use('/*', async (c, next) => {
-  console.log(c.req)
   const jwt = c.req.header('authorization');
   if (!jwt || !jwt.startsWith('Bearer ')) {
     c.status(403);
@@ -60,14 +59,14 @@ blogRouter.post("/create", async (c) => {
     c.status(411);
     return c.json({
       message: "Invalid Inputs"
-    })
+    });
   }
 
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const userId = c.get('userId')
+  const userId = c.get('userId');
 
   try {
     const post = await prisma.post.create({
@@ -78,25 +77,43 @@ blogRouter.post("/create", async (c) => {
         published: body.published,
         author: body.name
       }
-    })
+    });
+
+    // Email function
+    const resend = new Resend('your api');
+    const receiver = body.email;
+
+    try {
+      const data = await resend.emails.send({
+        from: 'ThoughtSphere@webmaven.tech',
+        to: receiver,
+        subject: 'Blog Created',
+        html: `<strong>Blog Created Successfully</strong><br/><p>Title :: ${body.title}</p><br/><p>Status: ${body.published ? "Published" : "Draft"}</p>`
+      });
+      console.log(data);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+    }
+
     return c.json({
       message: "Blog created Successfully",
       id: post.id,
-      name:  post.authorId
-    })
-  } catch (error) {
+      name: post.authorId
+    });
+  } catch (error: any) {
     c.status(403);
     return c.json({
-      message: "error creating post",
-      error: error,
+      message: "Error creating post",
+      error: error.message,
       user: userId
-    })
+    });
   }
 });
 
 
-blogRouter.put("/update", async (c) => {
+blogRouter.put("/update/:id", async (c) => {
   const body = await c.req.json();
+  const id = c.req.param('id');
   // const { success } = updateBlogInput.safeParse(body);
   // if (!success) {
   //   c.status(411);
@@ -104,24 +121,42 @@ blogRouter.put("/update", async (c) => {
   //     message: "Invalid Inputs"
   //   })
   // }
-
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
+  console.log(body.published);
 
   const userId = c.get("userId")
   try {
     const blog = await prisma.post.update({
       where: {
-        id: body.id,
+        id: id,
         authorId: userId
       },
       data: {
         title: body.title,
-        content: body.content,
+        // content: body.content,
         published: body.published
       }
     })
+
+    // Email function
+    const resend = new Resend('your api');
+    const receiver = "r1977sdausa@gmail.com" //body.email;
+
+    try {
+      const data = await resend.emails.send({
+        from: 'ThoughtSphere@webmaven.tech',
+        to: receiver,
+        subject: 'Blog Edited',
+        html: `<strong>Blog Edited Successfully</strong><br/><p>Title :: ${body.title}</p>`
+        // html: "Edit success"
+      });
+      console.log(data);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+    }
+
     return c.json({
       message: "Blog Updated Successfully",
       blog
@@ -149,7 +184,7 @@ blogRouter.get('/bulk', async (c) => {
         content: true,
         title: true,
         id: true,
-        published:true,
+        published: true,
         createdAt: true,
         author: {
           select: {
@@ -177,13 +212,13 @@ blogRouter.get("/:id", async (c) => {
     const post = await prisma.post.findFirst({
       where: {
         id,
-        published: true
+        // published: true
       },
       select: {
         id: true,
         title: true,
         content: true,
-        published:true,
+        published: true,
         author: {
           select: {
             name: true
@@ -216,7 +251,7 @@ blogRouter.post('/myblog', async (c) => {
         content: true,
         title: true,
         id: true,
-        published:true,
+        published: true,
         createdAt: true,
         author: {
           select: {
@@ -267,7 +302,8 @@ blogRouter.get('/search/:param?', async (c) => {
         id: true,
         title: true,
         content: true,
-        published:true,
+        published: true,
+        createdAt: true,
         author: {
           select: {
             name: true
@@ -283,3 +319,135 @@ blogRouter.get('/search/:param?', async (c) => {
     console.error('Error searching posts:', error);
   }
 })
+
+
+blogRouter.delete("/:id", async (c) => {
+  const id = c.req.param('id');
+  const body = await c.req.json();
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const post = await prisma.post.delete({
+      where: {
+        id
+      },
+    });
+    // Email function
+    const resend = new Resend('your api');
+    const receiver = body.email;
+
+    try {
+      const data = await resend.emails.send({
+        from: 'ThoughtSphere@webmaven.tech',
+        to: receiver,
+        subject: 'Blog Deleted',
+        html: `<strong>Blog Deleted Successfully</strong>`
+      });
+      console.log(data);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+    }
+    return c.json(post);
+  } catch (error) {
+    return c.json({
+      message: "Error fetching the blog"
+    })
+  }
+});
+
+
+blogRouter.post("/ai", async (c) => {
+  try {
+    // Check if Content-Type is application/json
+    const contentType = c.req.header("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return c.json({ error: "Content-Type must be application/json" }, 400);
+    }
+    console.log(c.req.header);  // Log the headers to inspect
+
+    // Try to parse the body as JSON
+    let body;
+    try {
+      body = await c.req.json();
+    } catch (error) {
+      return c.json({ error: "Invalid JSON format" }, 400);
+    }
+
+    const { prompt } = body;
+
+    if (!prompt) {
+      return c.json({ error: "Prompt is required" }, 400);
+    }
+
+    const genAI = new GoogleGenerativeAI("your api");
+
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const generateContent = async (prompt: string) => {
+      try {
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (error) {
+        console.error("Error generating content:", error);
+        throw error; // Re-throw the error for handling in other files
+      }
+    };
+    const generatedContent = await generateContent(prompt);
+
+    return c.json({ content: generatedContent });
+  } catch (error) {
+    console.error("Error in /ai route:", error);
+    return c.json({ error: "Failed to generate content" }, 500);
+  }
+});
+
+
+blogRouter.post("/summarize", async (c) => {
+  try {
+    // Check if Content-Type is application/json
+    const contentType = c.req.header("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return c.json({ error: "Content-Type must be application/json" }, 400);
+    }
+    console.log(c.req.header);  // Log the headers to inspect
+
+    // Try to parse the body as JSON
+    let body;
+    try {
+      body = await c.req.json();
+    } catch (error) {
+      return c.json({ error: "Invalid JSON format" }, 400);
+    }
+
+    let { prompt } = body;
+    prompt = prompt + " summarize using bulletpoints in 150 words use html tags"
+
+    if (!prompt) {
+      return c.json({ error: "Prompt is required" }, 400);
+    }
+
+    const genAI = new GoogleGenerativeAI("your api");
+
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const generateContent = async (prompt: string) => {
+      try {
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (error) {
+        console.error("Error generating content:", error);
+        throw error; // Re-throw the error for handling in other files
+      }
+    };
+    const generatedContent = await generateContent(prompt);
+
+    return c.json({ content: generatedContent });
+  } catch (error) {
+    console.error("Error in /ai route:", error);
+    return c.json({ error: "Failed to generate content" }, 500);
+  }
+});

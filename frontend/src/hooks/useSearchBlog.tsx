@@ -19,7 +19,7 @@ export const useSearchBlog = () => {
       .then((response) => {
         setSearchBlogs(response.data.posts);
         setLoading(false);
-        console.log(searchBlogs);
+        // console.log(searchBlogs);
         
       });
   }, []);
