@@ -287,15 +287,15 @@ blogRouter.get('/search/:param?', async (c) => {
           {
             title: {
               contains: param,
-              mode: 'insensitive', // optional: case-insensitive search
+              mode: 'insensitive', // case-insensitive search
             },
           },
-          {
-            content: {
-              contains: param,
-              mode: 'insensitive',
-            },
-          },
+          // {
+          //   content: {
+          //     contains: param,
+          //     mode: 'insensitive',
+          //   },
+          // },
         ],
       },
       select: {
