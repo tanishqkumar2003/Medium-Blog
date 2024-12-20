@@ -19,7 +19,6 @@ const CreateBlogContent = () => {
     setChecked(!checked);
   };
   console.log(checked);
-  
 
   const handleSearch = async () => {
     if (!search.trim()) {
@@ -39,10 +38,8 @@ const CreateBlogContent = () => {
           },
         }
       );
-      // const x = await response.data.content;
       if (response?.data) {
         setData(response.data.content);
-        // console.log("AI Response:", data);
       } else {
         console.warn("No data received from AI.");
       }
@@ -52,13 +49,13 @@ const CreateBlogContent = () => {
     }
   };
 
-  async function createPost() {
+  const createPost = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `${BACKEND_URL}/api/v1/blog/create`,
         {
-          title: title,
-          content: content, // Use the global content here
+          title,
+          content, // Use the global content here
           authorId: localStorage.getItem("id"),
           published: checked,
           email: localStorage.getItem("username"),
@@ -69,20 +66,19 @@ const CreateBlogContent = () => {
           },
         }
       );
-      console.log(response);
-      // console.log("Title:", title);
-      // console.log("Content:", content);
       navigate("/blogs");
     } catch (e) {
       alert("Error while creating the blog post");
     }
-  }
+  };
 
   return (
-    <div className="flex space-x-11">
-      <div className="max-w-2xl w-2/3 p-2 bg-white rounded-lg shadow-md mt-2 m-16">
+    <div className="flex flex-col lg:flex-row space-x-0 lg:space-x-11 px-4 sm:px-7 mt-5">
+      <div className="max-w-2xl w-full sm:w-2/3 p-2 bg-white rounded-lg shadow-md mt-2">
         <div className="flex justify-center items-center mb-5">
-          <h2 className="text-5xl font-extrabold">Create a New Blog Post</h2>
+          <h2 className="text-3xl sm:text-5xl font-extrabold">
+            Create a New Blog Post
+          </h2>
         </div>
         <BlogTitle
           onchange={(e) => {
@@ -92,7 +88,7 @@ const CreateBlogContent = () => {
 
         <TextEditor />
 
-        <div className="flex items-center pt-5">
+        <div className="flex items-center pt-10">
           <label className="inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -114,7 +110,7 @@ const CreateBlogContent = () => {
         </button>
       </div>
 
-      <div className="w-1/3 bg-slate-400 min-h-96 mt-16 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out p-5">
+      <div className="w-full sm:w-1/3 bg-slate-400 min-h-96 mt-5 sm:mt-16 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out p-5">
         <form className="space-y-4">
           <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
             Search
