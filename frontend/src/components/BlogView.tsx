@@ -164,7 +164,10 @@ export const BlogView = ({ blog }: { blog: Blog }) => {
             <h2 className="text-2xl font-semibold mb-4 text-center">
               AI Summary
             </h2>
-            <p className="prose text-gray-600 mb-4">{summary}</p>
+            <div
+              className="prose max-w-full text-gray-700"
+              dangerouslySetInnerHTML={{ __html: summary }}
+            ></div>
             <button
               onClick={closeModal}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg block mx-auto"
