@@ -16,7 +16,6 @@ export const Blogs = () => {
       minute: "2-digit",
     });
   }
-  // console.log(blogs); 
 
   if (loading) {
     return (
@@ -48,12 +47,12 @@ export const Blogs = () => {
     );
   }
 
-
   return (
     <>
       <Appbar />
-      <div className="flex">
-        <div className="px-7 mt-5 w-3/5 ">
+      <div className="flex flex-col lg:flex-row">
+        {/* Blog List Section */}
+        <div className="px-4 mt-5 w-full lg:w-3/5">
           {blogs.map((blog) => (
             <BlogCard
               id={blog.id}
@@ -65,12 +64,16 @@ export const Blogs = () => {
             />
           ))}
         </div>
-        <div className="w-4/12 flex items-center justify-center text-center font-extrabold text-2xl bg-white shadow-md rounded-lg p-6 h-auto mt-28 fixed right-9">
-          <div>
-            "Empower your voice with our blog app — a seamless platform to
-            write, share, and inspire. From storytelling to thought leadership,
-            unleash creativity and connect with a global audience effortlessly.
-            Your story, your way!"
+
+        {/* Sidebar Section */}
+        <div className="w-full lg:w-4/12 mt-10 lg:mt-28 px-6 lg:fixed lg:right-9">
+          <div className="flex items-center justify-center text-center font-extrabold text-lg md:text-2xl bg-white shadow-md rounded-lg p-4 lg:p-6 h-auto">
+            <div>
+              "Empower your voice with our blog app — a seamless platform to
+              write, share, and inspire. From storytelling to thought
+              leadership, unleash creativity and connect with a global audience
+              effortlessly. Your story, your way!"
+            </div>
           </div>
         </div>
       </div>
